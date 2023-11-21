@@ -23,6 +23,9 @@ config: prep ## configure make for release version of sliderule
 config-library: prep ## configure make for shared library libsliderule.so
 	cd $(BUILD); cmake -DCMAKE_BUILD_TYPE=Release -DSHARED_LIBRARY=ON $(CFG) $(ROOT)
 
+config-debug: prep 
+	cd $(BUILD); cmake -DCMAKE_BUILD_TYPE=Debug $(CFG) $(ROOT)
+
 install: ## install sliderule to system
 	make -C $(BUILD) install
 
