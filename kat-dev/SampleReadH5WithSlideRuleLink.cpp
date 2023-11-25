@@ -28,7 +28,6 @@ int main() {
     const char* url = "ATL03_20230816235231_08822014_006_01.h5";
     const char* datasetname = "/quality_assessment/gt2l/qa_total_signal_conf_ph_high"; // "/gt1r/geolocation/yaw";
     RecordObject::valType_t valtype = RecordObject::valType_t::DYNAMIC;
-<<<<<<< HEAD
     long col = 0; // single dim
     long startrow = 0;
     long numrows = 1;
@@ -41,16 +40,6 @@ int main() {
     std::cout << "Read complete; access data\n";
     unsigned int access = static_cast<unsigned int>(*result.data);
     std::cout << "uint8 access value: " << access << "\n";
-=======
-    long col = 2; // single dim
-    long startrow = 0; 
-    long numrows = 1; 
-    H5Coro::context_t* context = nullptr; // simplify to no context
-    bool meta_only = false; // t if metadata only
-
-    H5Future::info_t result = H5Coro::read(asset, url, datasetname, 
-    valtype, col, startrow, numrows, context, meta_only);
->>>>>>> b3612ecceb4d414220ec95e12c41fe46eee19520
 
     delete asset;
     H5Coro::deinit();
@@ -58,3 +47,4 @@ int main() {
 
     return 0;
 }
+
