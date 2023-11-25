@@ -38,8 +38,19 @@ int main() {
     H5Future::info_t result = H5Coro::read(asset, url, datasetname,
     valtype, col, startrow, numrows, context, meta_only);
     std::cout << "Read complete; access data\n";
-    unsigned int access = static_cast<unsigned int>(*result.data);
-    std::cout << "uint8 access value: " << access << "\n";
+
+    // single element access
+    unsigned int access0 = static_cast<unsigned int>(*result.data);
+    std::cout << "uint8 access 0 value: " << access0 << "\n";
+    unsigned int access1 = static_cast<unsigned int>(*(result.data + 1));
+    std::cout << "uint8 access 1 value: " << access1 << "\n";
+
+    // try shoving all vals into int64
+    int64_t singleValue = 0;
+    for (int i = 0; i < 3; ++i) {
+        singleValue |= static_cast<int64_t>(result.data[i]) << (8 * i);
+    }
+    std::cout << "The int64_t value is: " << singleValue << std::endl;
 
     delete asset;
     H5Coro::deinit();
