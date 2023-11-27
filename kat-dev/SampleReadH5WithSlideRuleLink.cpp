@@ -1,18 +1,23 @@
 #include <iostream>
-// #include "H5Coro.h"
+#include <cassert>
 #include "core.h"
 #include "h5.h"
 
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+const bool SYS_LITTLE_ENDIAN = true;
+#else
+const bool SYS_LITTLE_ENDIAN = false;
+#endif
+
 int main() {
+
+    assert(SYS_LITTLE_ENDIAN);
 
     initcore();
     H5Coro::init(1);
 
-    // TODO: resgister driver for "file"
-    // bool status; // force ignore
     Asset::registerDriver(FileIODriver::FORMAT, FileIODriver::create);
     
-    //const Asset* asset = nullptr;
     std::vector<const char*> attr_in = {
         "local",
         "local",
@@ -27,8 +32,8 @@ int main() {
     // the path to the file that is appended to the path parameter of the Asset object you created
     const char* url = "ATL03_20230816235231_08822014_006_01.h5";
     const char* datasetname = "/quality_assessment/gt2l/qa_total_signal_conf_ph_high"; // "/gt1r/geolocation/yaw";
-    RecordObject::valType_t valtype = RecordObject::valType_t::DYNAMIC;
-    long col = 0; // single dim
+    RecordObject::valType_t valtype = RecordObject::valType_t::INTEGER; //DYNAMIC;
+    long col = 4; // single dim
     long startrow = 0;
     long numrows = 1;
     H5Coro::context_t* context = nullptr; // simplify to no context
@@ -39,18 +44,15 @@ int main() {
     valtype, col, startrow, numrows, context, meta_only);
     std::cout << "Read complete; access data\n";
 
-    // single element access
-    unsigned int access0 = static_cast<unsigned int>(*result.data);
-    std::cout << "uint8 access 0 value: " << access0 << "\n";
-    unsigned int access1 = static_cast<unsigned int>(*(result.data + 1));
-    std::cout << "uint8 access 1 value: " << access1 << "\n";
+    // try: recast uint8_t* arr result to int64 to test result - H5T_STD_I64LE type known
+    // RESULT: 1121506
+    // int64_t* recast = reinterpret_cast<int64_t*>(result.data);
+    // std::cout << "int64 access 0 value: " << *recast << "\n";
 
-    // try shoving all vals into int64
-    int64_t singleValue = 0;
-    for (int i = 0; i < 3; ++i) {
-        singleValue |= static_cast<int64_t>(result.data[i]) << (8 * i);
-    }
-    std::cout << "The int64_t value is: " << singleValue << std::endl;
+    // try: int method 
+    // RESULT: 1121506
+    int* recast = reinterpret_cast<int*>(result.data);
+    std::cout << "int access 0 value: " << *(recast)<< "\n";
 
     delete asset;
     H5Coro::deinit();
