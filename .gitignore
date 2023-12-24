@@ -1,8 +1,12 @@
 .vscode/
-data/
+# data/ATL03_20230816235231_08822014_006_01.h5
 
 # Prerequisites
 *.d
+
+# H5 Files and NC
+*.nc
+*.h5
 
 # Compiled Object files
 *.slo

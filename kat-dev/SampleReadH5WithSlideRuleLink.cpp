@@ -31,9 +31,11 @@ int main() {
     const Asset* asset = Asset::assetFactory(NULL, attr_in);
     // the path to the file that is appended to the path parameter of the Asset object you created
     const char* url = "ATL03_20230816235231_08822014_006_01.h5";
-    const char* datasetname = "/quality_assessment/gt2l/qa_total_signal_conf_ph_high"; // "/gt1r/geolocation/yaw";
+    const char* datasetname = "/gt1l/heights/signal_conf_ph";
+    // "/quality_assessment/gt2l/qa_total_signal_conf_ph_high"; 
+    // "/gt1r/geolocation/yaw";
     RecordObject::valType_t valtype = RecordObject::valType_t::INTEGER; //DYNAMIC;
-    long col = 4; // single dim
+    long col = 0; //4; // single dim
     long startrow = 0;
     long numrows = 1;
     H5Coro::context_t* context = nullptr; // simplify to no context
@@ -44,15 +46,9 @@ int main() {
     valtype, col, startrow, numrows, context, meta_only);
     std::cout << "Read complete; access data\n";
 
-    // try: recast uint8_t* arr result to int64 to test result - H5T_STD_I64LE type known
-    // RESULT: 1121506
-    // int64_t* recast = reinterpret_cast<int64_t*>(result.data);
-    // std::cout << "int64 access 0 value: " << *recast << "\n";
-
-    // try: int method 
-    // RESULT: 1121506
-    int* recast = reinterpret_cast<int*>(result.data);
-    std::cout << "int access 0 value: " << *(recast)<< "\n";
+    // try: recast to i1 as expected then float
+    int8_t* recast = reinterpret_cast<int8_t*>(result.data);
+    std::cout << "int8 access value: " << static_cast<float>(*recast) << "\n";
 
     delete asset;
     H5Coro::deinit();
