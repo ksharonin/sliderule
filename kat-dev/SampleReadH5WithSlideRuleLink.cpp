@@ -22,20 +22,28 @@ int main() {
         "local",
         "local",
         "file",
-        "/host/kat-dev/data", // "/home/ubuntu/Downloads/sliderule/kat-dev/data"
+        "./data", // "/host/kat-dev"
         "nil",
         "nil",
         "nil"
     };
 
+    // TODO: JSON KERCHUNK METADATA EXTRACTION
+    // for now, assume the json lies in the specified attr_in directory 
+    // no control under the hood aside conditioning redirecting
+
     const Asset* asset = Asset::assetFactory(NULL, attr_in);
     // the path to the file that is appended to the path parameter of the Asset object you created
     const char* url = "ATL03_20230816235231_08822014_006_01.h5";
-    const char* datasetname = "/gt1l/heights/signal_conf_ph";
-    // "/quality_assessment/gt2l/qa_total_signal_conf_ph_high"; 
-    // "/gt1r/geolocation/yaw";
-    RecordObject::valType_t valtype = RecordObject::valType_t::INTEGER; //DYNAMIC;
-    long col = 0; //4; // single dim
+    const char* datasetname = "/ancillary_data/calibrations/first_photon_bias/gt1l/ffb_corr";
+    // "/ancillary_data/calibrations/first_photon_bias/cal19_product"; <- valid read as string
+    //"/ancillary_data/calibrations/dead_time_radiometric_signal_loss/gt1l/rad_corr";
+    // "/gt1l/heights/signal_conf_ph";
+
+    // RecordObject::valType_t valtype = RecordObject::valType_t::INTEGER; //DYNAMIC;
+    RecordObject::valType_t valtype = RecordObject::valType_t::DYNAMIC;
+
+    long col = 0;
     long startrow = 0;
     long numrows = 1;
     H5Coro::context_t* context = nullptr; // simplify to no context

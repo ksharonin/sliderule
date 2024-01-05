@@ -116,7 +116,7 @@ class H5FileBuffer
         *--------------------------------------------------------------------*/
 
         static const long ALL_ROWS      = -1;
-        static const int MAX_NDIMS      = 2;
+        static const int MAX_NDIMS      = 4; // 2;
         static const int FLAT_NDIMS     = 3;
 
         /*--------------------------------------------------------------------
