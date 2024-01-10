@@ -43,20 +43,21 @@ int main() {
     // RecordObject::valType_t valtype = RecordObject::valType_t::INTEGER; //DYNAMIC;
     RecordObject::valType_t valtype = RecordObject::valType_t::DYNAMIC;
 
-    long col = 0;
+    long col = 1;
     long startrow = 0;
-    long numrows = 1;
+    long numrows = 4;
     H5Coro::context_t* context = nullptr; // simplify to no context
     bool meta_only = false; // t if metadata only
 
     std::cout << "Attempt H5Coro read\n";
     H5Future::info_t result = H5Coro::read(asset, url, datasetname,
     valtype, col, startrow, numrows, context, meta_only);
+    
     std::cout << "Read complete; access data\n";
-
-    // try: recast to i1 as expected then float
-    int8_t* recast = reinterpret_cast<int8_t*>(result.data);
-    std::cout << "int8 access value: " << static_cast<float>(*recast) << "\n";
+    // int8_t* recast = reinterpret_cast<int8_t*>(result.data);
+    double* recast = reinterpret_cast<double*>(result.data);
+    // std::cout << "access value: " << static_cast<float>(*recast) << "\n";
+    std::cout << "access value: " << recast[2] << "\n";
 
     delete asset;
     H5Coro::deinit();
